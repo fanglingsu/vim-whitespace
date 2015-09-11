@@ -12,11 +12,10 @@ endif
 let g:loaded_whitespace = 1
 
 " delete trailing white space
-fun! s:DeleteTrailingWS()
-    let b:l = line(".")
-    let b:c = col(".")
-    %s/\s\+$//ge
-    call cursor(b:l, b:c)
+fun! s:DeleteTrailingWS(startLine, endLine)
+    let l:cursor = getpos('.')
+    exe a:startLine . ',' . a:endLine . 's/\s\+$//ge'
+    call setpos('.', l:cursor)
 endfun
 
 let s:whitespace_highlight = 1
@@ -30,7 +29,7 @@ fun! s:ToggleDisplayWhitespace()
     let s:whitespace_highlight = !s:whitespace_highlight
 endfun
 
-command! -nargs=0 DeleteTrailingWS call <SID>DeleteTrailingWS()
+command! -range=% -nargs=0 DeleteTrailingWS call <SID>DeleteTrailingWS(<line1>, <line2>)
 command! -nargs=0 ToggleDisplayWhitespace call <SID>ToggleDisplayWhitespace()
 
 " vim:sts=4:sw=4:et:
